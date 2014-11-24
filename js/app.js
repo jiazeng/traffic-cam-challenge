@@ -33,14 +33,18 @@ $(document).ready(function() {
         .done(function (data) {
             stations = data;
 
+            var image = 'img/camera.png';
+
             data.forEach(function (station, itemIndex) { //adding item index?
                 var marker = new google.maps.Marker({
                     position: {
                         lat: Number(station.location.latitude),
                         lng: Number(station.location.longitude)
                     },
-                    map: map
+                    map: map,
+                    icon: image,
                 });
+
 
                 markers.push(marker);
 
@@ -52,6 +56,8 @@ $(document).ready(function() {
 
                     infoWindow.setContent(html);
                     infoWindow.open(map, this);
+                    //bounce the marker when click
+                    marker.setAnimation(google.maps.Animation.BOUNCE);
                 });
 
                 $("#search").bind("search keyup", function () {
@@ -67,6 +73,11 @@ $(document).ready(function() {
                     }
 
                 });
+
+                google.maps.event.addListener(map, 'click', function() {
+                    infoWindow.close();
+                    marker.setAnimation(null);
+                })
             });
         })
         .fail(function (error) {
@@ -75,6 +86,17 @@ $(document).ready(function() {
         .always(function () {
             $('#ajax-loader').fadeOut();
         });
+
+    $( window ).resize(function() {
+        var windowHeight = $(window).height();
+        var mapPosition = $('#map').position().top;
+        var resize = windowHeight - mapPosition - 20;
+        console.log(resize);
+        $('#map').height(resize);
+        google.maps.event.trigger(map, 'resize');
+    });
+
+
 
 });
 
