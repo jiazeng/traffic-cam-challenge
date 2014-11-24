@@ -42,7 +42,7 @@ $(document).ready(function() {
                         lng: Number(station.location.longitude)
                     },
                     map: map,
-                    icon: image,
+                    icon: image
                 });
 
 
@@ -56,8 +56,10 @@ $(document).ready(function() {
 
                     infoWindow.setContent(html);
                     infoWindow.open(map, this);
+
                     //bounce the marker when click
                     marker.setAnimation(google.maps.Animation.BOUNCE);
+                    setTimeout(function(){ marker.setAnimation(null); }, 750);
                 });
 
                 $("#search").bind("search keyup", function () {
